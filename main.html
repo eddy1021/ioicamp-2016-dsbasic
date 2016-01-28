@@ -1,0 +1,763 @@
+<!doctype html>
+<html lang="en">
+
+	<head>
+		<meta charset="utf-8">
+
+		<title>reveal.js – The HTML Presentation Framework</title>
+
+		<meta name="description" content="A framework for easily creating beautiful presentations using HTML">
+		<meta name="author" content="Hakim El Hattab">
+
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+
+		<link rel="stylesheet" href="css/reveal.css">
+		<link rel="stylesheet" href="css/theme/black.css" id="theme">
+
+		<!-- Code syntax highlighting -->
+		<link rel="stylesheet" href="lib/css/zenburn.css">
+
+		<!-- Printing and PDF exports -->
+		<script>
+			var link = document.createElement( 'link' );
+			link.rel = 'stylesheet';
+			link.type = 'text/css';
+			link.href = window.location.search.match( /print-pdf/gi ) ? 'css/print/pdf.css' : 'css/print/paper.css';
+			document.getElementsByTagName( 'head' )[0].appendChild( link );
+		</script>
+
+		<!--[if lt IE 9]>
+		<script src="lib/js/html5shiv.js"></script>
+		<![endif]-->
+	</head>
+
+	<body>
+
+		<div class="reveal">
+
+			<!-- Any section element inside of this container is displayed as a slide -->
+			<div class="slides">
+				<section>
+          <section>
+					  <h1>Data Structure Basic</h1>
+          </section>
+          <section>
+            <h1>Who am I?</h1>
+            <ul>
+              <li>eddy1021,eddy,艾迪,欸底,...</li>
+              <li>PECaveros</li>
+            </ul> 
+          </section>
+          <section>
+            <h2>What you will learn?</h2>
+            <ul>
+              <li>堆疊 stack</li>
+              <li>佇列 queue</li>
+              <li>雙端佇列 deque</li>
+              <li>優先佇列 priority queue</li>
+            </ul>
+          </section>
+          <section>
+            <h2>And also</h2>
+            <ul>
+              <li>並查集 disjoint set</li>
+              <li>線段樹 segment tree</li>
+              <li>樹堆 treap</li>
+              <li>...</li>
+            </ul>
+          </section>
+          <section>
+            <h1>Let's fight!</h1>
+          </section>
+				</section>
+        <!-- stack -->
+        <section>
+          <section>
+            <h1>堆疊 Stack</h1>
+          </section>
+          <section>
+            <h2>What is stack?</h2>
+            <ul>
+              <li>後進先出, Last In First Out</li>
+              <li>支援push, pop</li>
+            </ul>
+          </section>
+					<section>
+            <img src="images/stack.png">
+					</section>
+          <section>
+            <h2>How to do so?</h2>
+					  <pre><code class="cpp" data-trim contenteditable>
+#include &lt;stack&gt;
+#include &lt;stdio.h&gt;
+using namespace std;
+int main(){
+  stack&lt;int&gt; s;
+  s.push( 514 ); s.push( 514514 );
+  printf( "%d\n" , (int)s.size() ); // 2
+  printf( "%d\n" , s.top() ); // 514514
+  s.pop();
+  printf( "%d\n" , s.top() ); // 514
+  s.pop();
+  printf( "%s\n" , s.empty() ? "empty" : "not empty" );
+  // empty
+}
+					  </code></pre>
+          </section>
+          <section>
+            <h1>常見題型</h1>
+            <ul>
+              <li>一臉堆疊樣</li>
+              <li>維護凸包</li>
+              <li>維護單調性</li>
+            </ul>
+          </section>
+          <section>
+            <p>寬 $N$ 的直方圖，第 $i$ 單位寬的部分高 $h_i$，問面積最大的矩形？</p>
+            <img src="images/poj2559.png">
+          </section>
+          <section>
+            <h2>枚舉左右界</h2>
+            <p>最佳矩形高度爲 $\min\{ h_L, h_{L+1}, \ldots, h_R \}$</p>
+          </section>
+          <section>
+            <h2>最佳左右界</h2>
+            <p>往外擴到底！</p>
+            <img src="images/poj2559-1.png">
+          </section>
+          <section>
+            <h2>單調性</h2>
+            <p>若存在 $j$ &lt; $i$ 且 $h_j$ &gt; $h_i$，則 $i$ 以後 $h_j$ 無法成爲區間極值</p>
+          </section>
+          <section>
+            <h2>計算最佳左右界</h2>
+            <ol>
+              <li>考慮 $h_i$</li>
+              <li>堆疊頂端 $h_j \ge h_i$，則pop </li>
+              <li>若堆疊爲空，最佳左(右)界爲1，否則爲 $j+1$(堆疊頂端爲 $h_j$)</li>
+              <li>push $h_i$</li>
+            </ol>
+          </section>
+          <section>
+            <h2>計算最佳左右界</h2>
+            <img src="images/poj2559-2.png">
+          </section>
+        </section>
+        <!-- queue -->
+        <section>
+          <section>
+            <h1>佇列 Queue</h1>
+          </section>
+          <section>
+            <h2>What is queue?</h2>
+            <ul>
+              <li>先進先出, First In First Out</li>
+              <li>支援push, pop</li>
+            </ul>
+          </section>
+					<section>
+            <img src="images/queue.png">
+					</section>
+          <section>
+            <h2>How to do so?</h2>
+					  <pre><code class="cpp" data-trim contenteditable>
+#include &lt;queue&gt;
+#include &lt;stdio.h&gt;
+using namespace std;
+int main(){
+  queue&lt;int&gt; q;
+  q.push( 514 ); q.push( 514514 );
+  printf( "%d\n" , (int)q.size() ); // 2
+  printf( "%d\n" , q.front() ); // 514
+  q.pop();
+  printf( "%d\n" , q.front() ); // 514514
+  q.pop();
+  printf( "%s\n" , q.empty() ? "empty" : "not empty" );
+  // empty
+}
+					  </code></pre>
+          </section>
+          <section>
+            <h1>常見題型</h1>
+            <ul>
+              <li>一臉佇列樣</li>
+              <li>Breadth First Search(BFS)!</li>
+              <li> <strike>中國人排隊問題</strike> </li>
+            </ul>
+          </section>
+          <section>
+            <p>$R \times C$的地圖上，有障礙物、人(恰一個)、起火點(若干個)，問人是否能在不受火災侵襲而逃出迷宮？</p>
+            <img src="images/uva11624.png">
+          </section>
+          <section>
+            <img src="images/uva11624-1.png">
+          </section>
+          <section>
+            <h2>火很多QQ</h2>
+            <p>要 BFS 很多次，複雜度 $O(R\times C \times R \times C)$</p>
+          </section>
+          <section>
+            <h1>全部火一起BFS!</h1>
+            <p>複雜度 $O(R\times C )$</p>
+          </section>
+        </section>
+        <!-- deque -->
+        <section>
+          <section>
+            <h1>雙端佇列 Deque</h1>
+          </section>
+          <section>
+            <h2>What is deque?</h2>
+            <ul>
+              <li>都進都出, Both In Both Out</li>
+              <li>支援兩端push, pop</li>
+            </ul>
+          </section>
+					<section>
+            <img src="images/deque.png">
+					</section>
+          <section>
+            <h2>How to do so?</h2>
+					  <pre><code class="cpp" data-trim contenteditable>
+#include &lt;deque&gt;
+#include &lt;stdio.h&gt;
+using namespace std;
+int main(){
+  deque&lt;int&gt; dq;
+  dq.push_back( 514 ); // 514
+  dq.push_back( 514514 ); // 514 514514
+  dq.push_front( 514514514 ); // 514514514 514 514514
+  printf( "%d\n" , (int)dq.size() ); // 3
+  printf( "%d\n" , dq.front() ); // 514514514
+  printf( "%d\n" , dq.back() ); // 514514
+  dq.pop_front();
+  printf( "%d\n" , dq[ 1 ] ); // 514514
+}
+					  </code></pre>
+            <h3>STL 中 deque 支援random access!</h3>
+          </section>
+          <section>
+            <h1>常見題型</h1>
+            <ul>
+              <li>一臉得可樣</li>
+              <li>維護單調性與區間長度</li>
+              <li>DP斜率優化</li>
+            </ul>
+          </section>
+        </section>
+        <!-- priority queue -->
+        <section>
+          <section>
+            <h1>優先佇列</h1>
+            <h1>Priority Queue</h1>
+          </section>
+          <section>
+            <h2>What is priority queue?</h2>
+            <ul>
+              <li>VIP制</li>
+              <li>優先權越高，越早出來</li>
+              <li>支援push, pop</li>
+            </ul>
+          </section>
+					<section>
+            <img src="images/heap.png">
+					</section>
+          <section>
+            <h2>How to do so?</h2>
+					  <pre><code class="cpp" data-trim contenteditable>
+#include &lt;queue&gt;
+#include &lt;stdio.h&gt;
+using namespace std;
+typedef priority_queue&lt;int&gt; Heap;
+int main(){
+  Heap h;
+  h.push( 5 ); h.push( 1 ); h.push( 4 );
+  printf( "%d\n" , (int)h.size() ); // 3
+  printf( "%d\n" , h.top() ); // 5
+  h.pop();
+  printf( "%d\n" , h.top() ); // 4
+  h.push( 2 );
+  printf( "%d\n" , h.top() ); // 4
+  h.pop();
+  printf( "%d\n" , h.top() ); // 2
+}
+					  </code></pre>
+            <h3>STL 中優先權大者爲值較大者</h3>
+          </section>
+          <section>
+            <h2>自定義比較函式</h2>
+            <pre><code class="cpp" data-trim contenteditable>
+struct cmp{
+  bool operator()( int a , int b ){
+    return a % 3 &lt; b % 3;
+  }
+};
+int main(){
+  priority_queue&lt;int, vector&lt;int&gt;, cmp&gt; h;
+  h.push( 4 );
+  printf( "%d\n" , h.top() ); // 4, 4 % 3 == 1
+  h.push( 51 );
+  printf( "%d\n" , h.top() ); // 4, 51 % 3 == 0
+  h.push( 104 );
+  printf( "%d\n" , h.top() ); // 104, 104 % 3 == 2
+}
+            </code></pre>
+          </section>
+          <section>
+            <h1>常見問題</h1>
+            <ul>
+              <li>Greedy的輔助工具</li>
+              <li>動態維護極值</li>
+            </ul>
+          </section>
+          <section>
+            <h1>這樣就滿足了嗎？</h1>
+          </section>
+          <section>
+            <h2>Black Magic</h2>
+            <pre><code class="cpp" data-trim contenteditable>
+#include &lt;bits/extc++.h&gt;
+#include &lt;stdio.h&gt;
+using namespace __gnu_pbds;
+typedef priority_queue&lt;int&gt; heap;
+int main(){
+  heap h1 , h2;
+  h1.push( 1 ); h1.push( 3 );
+  h2.push( 2 ); h2.push( 4 );
+  h1.join( h2 );
+  printf( "%d\n" , (int)h1.size() ); // 4
+  printf( "%d\n" , (int)h2.size() ); // 0
+  printf( "%d\n" , h1.top() ); // 4
+  h1.pop();
+}
+            </code></pre>
+            <h2>插入及合併$\Theta(1)$!</h2>
+          </section>
+        </section>
+        <!-- disjoint set -->
+        <section>
+          <section>
+            <h1>並查集</h1>
+            <h1>Disjoint Set</h1>
+          </section>
+          <section>
+            <h2>What is disjoint set?</h2>
+            <ul>
+              <li>維護兩兩互斥的集合</li>
+              <li>支援合併及查詢</li>
+            </ul>
+          </section>
+					<section>
+            <img src="images/djs.png">
+					</section>
+          <section>
+            <h2>How to do so?</h2>
+            <h3>沒有現成的可以用QQ</h3>
+          </section>
+          <section>
+            <h2>How to do so?</h2>
+            <h3>超好寫！</h3>
+					  <pre><code class="cpp" data-trim contenteditable>
+struct DisjointSet{
+  int p[ N ];
+  void Init( int n ){
+    for( int i = 1 ; i &lt;= n ; i ++ ) p[ i ] = i;
+  }
+  int Find( int x ){
+    return x == p[ x ] ? x : Find( p[ x ] );
+  }
+  void Union( int x , int y ){
+    p[ Find( x ) ] = Find( y );
+  }
+};
+					  </code></pre>
+          </section>
+          <section>
+            <h1>Upgrade!! 路徑壓縮</h1>
+					  <pre><code class="cpp" data-trim contenteditable>
+int Find( int x ){
+  return x == p[ x ] ? x : p[ x ] = Find( p[ x ] );
+}
+					  </code></pre>
+            <h2>查詢複雜度$O(\lg N)$</h2>
+          </section>
+					<section>
+            <img src="images/djs-1.png">
+					</section>
+          <section>
+            <h1>Upgrade again!! Union by rank</h1>
+            <h2>啓發式合併的思想</h2>
+            <h2>查詢複雜度$O(\lg N)$</h2>
+          </section>
+          <section>
+            <h1>雙管齊下！</h1>
+            <h2>操作均攤複雜度$O(\alpha(n))$</h2>
+          </section>
+          <section>
+            <h1>常見問題</h1>
+            <ul>
+              <li>連通塊</li>
+              <li>等價性質</li>
+            </ul>
+          </section>
+          <section>
+            <p>無向圖 $G$，$N$ 個點、$M$ 條邊，破壞 $Q$ 條邊，問每破壞一條邊後連通塊數？</p>
+            <img src="images/ural1671.png">
+          </section>
+          <section>
+            <h2>剛剛好像沒有教過將並查集分裂...</h2>
+          </section>
+          <section>
+            <h1>時光倒流！</h1>
+            <p>破壞 $\rightarrow$ 建造</p>
+          </section>
+          <section>
+            <h1>這樣就滿足了嗎？</h1>
+            <h3>(again)</h3>
+          </section>
+          <section>
+            <h1>Connected?</h1>
+            <p>給你 $N$ 個點，$Q$ 筆操作：加邊或將最近 $k$ 條邊拔除，每筆操作完輸出連通塊個數</p>
+          </section>
+          <section>
+            <h1>Connected?</h1>
+            <ul>
+              <li>可持久化 Disjoint Set?</li>
+              <li>倒著做?</li>
+            </ul>
+          </section>
+          <section>
+            <h1>Undo disjoint set!</h1>
+          </section>
+          <section>
+            <h2>Undo disjoint set!</h2>
+            <p>Find, Union都是一些assign操作!</p>
+          </section>
+          <section>
+            <h2>Undo disjoint set!</h2>
+					  <pre><code class="cpp" data-trim contenteditable>
+vector&lt; pair&lt;int*,int&gt; &gt; h; vector&lt;int&gt; sp;
+void assign( int *k, int v ){ h.push_back( {k, *k} ); *k = v; }
+void save(){ sp.push_back(h.size()); }
+void undo(){
+  int last=sp.back(); sp.pop_back();
+  while( h.size()!=last ){
+    auto x=h.back(); h.pop_back();
+    *x.first = x.second;
+  }
+}
+void Union( int x , int y ){
+  x = Find( x ); y = Find( y );
+  if( x == y ) return;
+  assign( &sz[ x ] , sz[ x ] + sz[ y ] );
+  assign( &p[ y ] , x );
+}
+					  </code></pre>
+          </section>
+        </section>
+        <!-- segment tree -->
+        <section>
+          <section>
+            <h1>線段樹</h1>
+            <h1>Segment Treee</h1>
+          </section>
+          <section>
+            <h2>What is segment tree?</h2>
+            <ul>
+              <li>二元樹狀結構</li>
+              <li>處理區間問題</li>
+            </ul>
+          </section>
+					<section>
+            <img src="images/st.png">
+					</section>
+          <section>
+            <h2>實作方式-node</h2>
+					  <pre><code class="cpp" data-trim contenteditable>
+struct Node{
+  int val;
+  Node *lc , *rc;
+  Node(){ val = 0; lc = rc = NULL; }
+  void pull(){
+    val = lc-&gt;val + rc-&gt;val;
+  }
+};
+            </code></pre>
+          </section>
+          <section>
+            <h2>實作方式-build</h2>
+					  <pre><code class="cpp" data-trim contenteditable>
+Node* build( int L , int R ){
+  Node *node = new Node();
+  if( L == R ){
+    node-&gt;val = v[ L ];
+    return node;
+  }
+  int mid = ( L + R ) &gt;&gt; 1;
+  node-&gt;lc = build( L , mid );
+  node-&gt;rc = build( mid + 1 , R );
+  node-&gt;pull();
+  return node;
+}
+            </code></pre>
+          </section>
+          <section>
+            <h2>實作方式-modify</h2>
+					  <pre><code class="cpp" data-trim contenteditable>
+void modify( Node* node , int L , int R , int i , int d ){
+  if( L == R ){
+    assert( L == i );
+    node-&gt;val += d;
+    return;
+  }
+  int mid = ( L + R ) &gt;&gt; 1;
+  if( i &lt;= mid ) modify( node-&gt;lc , L , mid , i , d );
+  else modify( node-&gt;rc , mid + 1 , R , i , d );
+  node-&gt;pull();
+}
+            </code></pre>
+          </section>
+					<section>
+            <img src="images/st-1.png">
+					</section>
+          <section>
+            <h2>實作方式-query</h2>
+					  <pre><code class="cpp" data-trim contenteditable>
+int query( Node* node , int L , int R , int ql , int qr ){
+  if( ql &gt; R || qr &lt; L ) return 0;
+  if( ql &lt;= L && R &lt;= qr ) return node-&gt;val;
+  int mid = ( L + R ) &gt;&gt; 1;
+  return query( node-&gt;lc , L , mid , ql , qr ) +
+         query( node-&gt;rc , mid + 1 , R , ql , qr );
+}
+            </code></pre>
+          </section>
+					<section>
+            <img src="images/st-2.png">
+					</section>
+          <section>
+            <h2>擴充包-懶標記(Lazy tag)</h2>
+          </section>
+					<section>
+            <img src="images/st-3.png">
+					</section>
+					<section>
+            <img src="images/st-4.png">
+					</section>
+					<section>
+            <img src="images/st-5.png">
+					</section>
+					<section>
+            <img src="images/st-6.png">
+					</section>
+          <section>
+            <h2>Push!</h2>
+					  <pre><code class="cpp" data-trim contenteditable>
+void push( Node* node , int L , int R ){
+  if( !node-&gt;tag ) return;
+  if( L != R ){ // check leaf
+    int mid = ( L + R ) &gt;&gt; 1;
+    node-&gt;lc-&gt;tag += node-&gt;tag;
+    node-&gt;rc-&gt;tag += node-&gt;tag;
+    node-&gt;lc-&gt;val += node-&gt;tag * ( mid - L + 1 );
+    node-&gt;rc-&gt;val += node-&gt;tag * ( R - mid );
+  }
+  node-&gt;tag = 0;
+}
+            </code></pre>
+          </section>
+          <section>
+            <h2>牛刀小試</h2>
+            <p>$N \times N$ 矩陣初始值爲零，$Q$ 筆操作:</p>
+            <ul>
+              <li> 將 $(x,y)$ 座標加上 d </li>
+              <li> 詢問 $(x_1,y_1)$ 到 $(x_2,y_2) 子矩陣的和。$ </li>
+            </ul>
+          </section>
+          <section>
+            <h2>擴充包2-copy on write</h2>
+          </section>
+          <section>
+            <h2>用到的點很少，那要用再開！</h2>
+            <img src="images/stcow.png">
+          </section>
+          <section>
+            <h2>牛刀小試2</h2>
+            <p>給長度 $N 的序列 $v$，$Q$ 筆操作:</p>
+            <ul>
+              <li> 將 $v_i$ 加上 d </li>
+              <li> 詢問第 $k$ 筆操作後，區間 $[l,r]$ 的總和 </li>
+            </ul>
+          </section>
+          <section>
+            <h2>擴充包3-可持久化</h2>
+          </section>
+          <section>
+            <h2>一個版本長一棵！</h2>
+            <img src="images/stper.png">
+          </section>
+          <section>
+            <h2>結論</h2>
+            <ul>
+              <li>區間修改 $\rightarrow$ 懶標記</li>
+              <li>大範圍區間 $\rightarrow$ Copy on write</li>
+              <li>版本控制 $\rightarrow$ 可持久化</li>
+            </ul>
+          </section>
+        </section>
+        <!-- treap -->
+        <section>
+          <section>
+            <h1>樹堆 Treap</h1>
+            <h3>邁向序列操作大師之路！</h3>
+          </section>
+          <section>
+            <h2>What is Treap?</h2>
+            <ul>
+              <li>Tree+Heap</li>
+              <li>滿足樹性質</li>
+              <li>滿足堆性質</li>
+            </ul>
+          </section>
+          <section>
+            <h2>樹性質？</h2>
+            <ul>
+              <li>Key $\ge$ 左子節點的 Key</li>
+              <li>Key $\le$ 右子節點的 Key</li>
+            </ul>
+          </section>
+          <section>
+            <h2>堆性質？</h2>
+            <ul>
+              <li>Pri $\ge$ 左子節點的 Pri</li>
+              <li>Pri $\ge$ 右子節點的 Pri</li>
+            </ul>
+          </section>
+          <section>
+            <h2>實作方式-Node</h2>
+            <pre><code class="cpp" data-trim contenteditable>
+struct Treap{
+  Treap *l , *r;
+  int pri , key , val;
+  Treap( int _val , int _key ) :
+    val( _val ) , key( _key ), l( 0 ), r( 0 ), pri( rand() ) {}
+};
+            </code></pre>
+          </section>
+          <section>
+            <h2>實作方式-merge</h2>
+            <h3>合併三部曲</h3>
+            <ul>
+              <li>樹爲空？</li>
+              <li>誰當根？</li>
+              <li>要做誰？</li>
+            </ul>
+          </section>
+          <section>
+            <h2>實作方式-merge</h2>
+            <pre><code class="cpp" data-trim contenteditable>
+Treap* merge( Treap* a , Treap* b ){
+  if( !a || !b ) return a ? a : b;
+  if( a-&gt;pri &gt; b-&gt;pri ){
+    a-&gt;r = merge( a-&gt;r , b );
+    return a;
+  }else{
+    b-&gt;l = merge( a , b-&gt;l );
+    return b;
+  }
+}
+            </code></pre>
+          </section>
+          <section>
+            <h2>實作方式-split</h2>
+            <h3>分裂三部曲</h3>
+            <ul>
+              <li>樹爲空？</li>
+              <li>根送誰？</li>
+              <li>要做誰？</li>
+            </ul>
+          </section>
+          <section>
+            <h2>實作方式-split</h2>
+            <pre><code class="cpp" data-trim contenteditable>
+void split( Treap* t , int k , Treap *&a , Treap *&b ){
+  if( !t ) a = b = NULL;
+  else if( t-&gt;key &lt;= k ){
+    a = t;
+    split( t-&gt;r , k , a-&gt;r , b );
+  }else{
+    b = t;
+    split( t-&gt;l , k , a , b-&gt;l );
+  }
+}
+            </code></pre>
+          </section>
+          <section>
+            <h2>沒有其他操作？</h2>
+          </section>
+          <section>
+            <h2>插入操作-Insert</h2>
+            <pre><code class="cpp" data-trim contenteditable>
+Treap* insert( Treap* t , int k ){
+  Treap *tl , *tr;
+  split( t , k , tl , tr );
+  return merge( tl , merge( new Treap( k ) , tr ) );
+}
+            </code></pre>
+          </section>
+          <section>
+            <h2>刪除操作-remove</h2>
+            <pre><code class="cpp" data-trim contenteditable>
+Treap* remove( Treap* t , int k ){
+  Treap *tl , *tr;
+  split( t , k - 1 , tl , t );
+  split( t , k , t , tr );
+  return merge( tl , tr );
+}
+            </code></pre>
+          </section>
+          <section>
+            <h1>去征服所有序列題吧！</h1>
+          </section>
+        </section>
+        <section>
+          <h2>Good Luck & Have Fun!</h2>
+        </section>
+			</div>
+
+		</div>
+
+		<script src="lib/js/head.min.js"></script>
+		<script src="js/reveal.js"></script>
+
+		<script>
+
+			// Full list of configuration options available at:
+			// https://github.com/hakimel/reveal.js#configuration
+			Reveal.initialize({
+				controls: true,
+				progress: true,
+				history: true,
+				center: true,
+
+				transition: 'slide', // none/fade/slide/convex/concave/zoom
+
+				// Optional reveal.js plugins
+				dependencies: [
+					{ src: 'lib/js/classList.js', condition: function() { return !document.body.classList; } },
+					{ src: 'plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+          { src: 'plugin/math/math.js', async: true },
+					{ src: 'plugin/zoom-js/zoom.js', async: true },
+					{ src: 'plugin/notes/notes.js', async: true }
+				]
+			});
+
+		</script>
+
+	</body>
+</html>
