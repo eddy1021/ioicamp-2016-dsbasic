@@ -41,340 +41,910 @@
 			<!-- Any section element inside of this container is displayed as a slide -->
 			<div class="slides">
 				<section>
-					<h1>Reveal.js</h1>
-					<h3>The HTML Presentation Framework</h3>
-					<p>
-						<small>Created by <a href="http://hakim.se">Hakim El Hattab</a> / <a href="http://twitter.com/hakimel">@hakimel</a></small>
-					</p>
+          <section>
+					  <h1>Data Structure Basic</h1>
+          </section>
+          <section>
+            <h1>Who am I?</h1>
+            <ul>
+              <li>eddy1021,eddy,艾迪,欸底,...</li>
+              <li>PECaveros</li>
+            </ul> 
+          </section>
+          <section>
+            <h2>What you will learn?</h2>
+            <ul>
+              <li>堆疊 stack</li>
+              <li>佇列 queue</li>
+              <li>雙端佇列 deque</li>
+              <li>優先佇列 priority queue</li>
+            </ul>
+          </section>
+          <section>
+            <h2>And also</h2>
+            <ul>
+              <li>並查集 disjoint set</li>
+              <li>線段樹 segment tree</li>
+              <li>樹堆 treap</li>
+              <li>...</li>
+            </ul>
+          </section>
+          <section>
+            <h1>Let's fight!</h1>
+          </section>
 				</section>
-
-				<section>
-					<h2>Hello There</h2>
-					<p>
-						reveal.js enables you to create beautiful interactive slide decks using HTML. This presentation will show you examples of what it can do.
-					</p>
-				</section>
-
-				<!-- Example of nested vertical slides -->
-				<section>
+        <!-- stack -->
+        <section>
+          <section>
+            <h1>堆疊 Stack</h1>
+          </section>
+          <section>
+            <h2>What is stack?</h2>
+            <ul>
+              <li>後進先出, Last In First Out</li>
+              <li>支援push, pop</li>
+            </ul>
+          </section>
 					<section>
-						<h2>Vertical Slides</h2>
-						<p>Slides can be nested inside of each other.</p>
-						<p>Use the <em>Space</em> key to navigate through all slides.</p>
-						<br>
-						<a href="#" class="navigate-down">
-							<img width="178" height="238" data-src="https://s3.amazonaws.com/hakim-static/reveal-js/arrow.png" alt="Down arrow">
-						</a>
+            <img src="images/stack.png">
 					</section>
+          <section>
+            <h2>How to do so?</h2>
+					  <pre><code class="cpp" data-trim contenteditable>
+#include &lt;stack&gt;
+#include &lt;stdio.h&gt;
+using namespace std;
+int main(){
+  stack&lt;int&gt; s;
+  s.push( 514 ); s.push( 514514 );
+  printf( "%d\n" , (int)s.size() ); // 2
+  printf( "%d\n" , s.top() ); // 514514
+  s.pop();
+  printf( "%d\n" , s.top() ); // 514
+  s.pop();
+  printf( "%s\n" , s.empty() ? "empty" : "not empty" );
+  // empty
+}
+					  </code></pre>
+          </section>
+          <section>
+            <h1>常見題型</h1>
+            <ul>
+              <li>一臉堆疊樣</li>
+              <li>維護凸包</li>
+              <li>維護單調性</li>
+            </ul>
+          </section>
+          <section>
+            <p>寬 $N$ 的直方圖，第 $i$ 單位寬的部分高 $h_i$，問面積最大的矩形？</p>
+            <img src="images/poj2559.png">
+          </section>
+          <section>
+            <h2>枚舉左右界</h2>
+            <p>最佳矩形高度爲 $\min\{ h_L, h_{L+1}, \ldots, h_R \}$</p>
+          </section>
+          <section>
+            <h2>最佳左右界</h2>
+            <p>往外擴到底！</p>
+            <img src="images/poj2559-1.png">
+          </section>
+          <section>
+            <h2>單調性</h2>
+            <p>若存在 $j$ &lt; $i$ 且 $h_j$ &gt; $h_i$，則 $i$ 以後 $h_j$ 無法成爲區間極值</p>
+          </section>
+          <section>
+            <h2>計算最佳左右界</h2>
+            <ol>
+              <li>考慮 $h_i$</li>
+              <li>堆疊頂端 $h_j \ge h_i$，則pop </li>
+              <li>若堆疊爲空，最佳左(右)界爲1，否則爲 $j+1$(堆疊頂端爲 $h_j$)</li>
+              <li>push $h_i$</li>
+            </ol>
+          </section>
+          <section>
+            <h2>計算最佳左右界</h2>
+            <img src="images/poj2559-2.png">
+          </section>
+          <section>
+            <pre><code class="cpp" data-trim contenteditable>
+stack&lt;int&gt; S;
+for( int i = 1 ; i &lt;= n ; i ++ ){
+  while( S.size() && h[ S.top() ] &gt;= h[ i ] ) S.pop();
+  L[ i ] = 1 + ( S.size() ? S.top() : 0 );
+  S.push( i );
+}
+while( S.size() ) S.pop();
+for( int i = n ; i &gt;= 1 ; i -- ){
+  while( S.size() && h[ S.top() ] &gt;= h[ i ] ) S.pop();
+  R[ i ] = ( S.size() ? S.top() : n + 1 ) - 1;
+  S.push( i );
+}
+            </code></pre>
+          </section>
+        </section>
+        <!-- queue -->
+        <section>
+          <section>
+            <h1>佇列 Queue</h1>
+          </section>
+          <section>
+            <h2>What is queue?</h2>
+            <ul>
+              <li>先進先出, First In First Out</li>
+              <li>支援push, pop</li>
+            </ul>
+          </section>
 					<section>
-						<h2>Basement Level 1</h2>
-						<p>Nested slides are useful for adding additional detail underneath a high level horizontal slide.</p>
+            <img src="images/queue.png">
 					</section>
-					<section>
-						<h2>Basement Level 2</h2>
-						<p>That's it, time to go back up.</p>
-						<br>
-						<a href="#/2">
-							<img width="178" height="238" data-src="https://s3.amazonaws.com/hakim-static/reveal-js/arrow.png" alt="Up arrow" style="transform: rotate(180deg); -webkit-transform: rotate(180deg);">
-						</a>
-					</section>
-				</section>
-
-				<section>
-					<h2>Slides</h2>
-					<p>
-						Not a coder? Not a problem. There's a fully-featured visual editor for authoring these, try it out at <a href="http://slides.com" target="_blank">http://slides.com</a>.
-					</p>
-				</section>
-
-				<section>
-					<h2>Point of View</h2>
-					<p>
-						Press <strong>ESC</strong> to enter the slide overview.
-					</p>
-					<p>
-						Hold down alt and click on any element to zoom in on it using <a href="http://lab.hakim.se/zoom-js">zoom.js</a>. Alt + click anywhere to zoom back out.
-					</p>
-				</section>
-
-				<section>
-					<h2>Touch Optimized</h2>
-					<p>
-						Presentations look great on touch devices, like mobile phones and tablets. Simply swipe through your slides.
-					</p>
-				</section>
-
-				<section data-markdown>
-					<script type="text/template">
-						## Markdown support
-
-						Write content using inline or external Markdown.
-						Instructions and more info available in the [readme](https://github.com/hakimel/reveal.js#markdown).
-
-						```
-						<section data-markdown>
-						  ## Markdown support
-
-						  Write content using inline or external Markdown.
-						  Instructions and more info available in the [readme](https://github.com/hakimel/reveal.js#markdown).
-						</section>
-						```
-					</script>
-				</section>
-
-				<section>
-					<section id="fragments">
-						<h2>Fragments</h2>
-						<p>Hit the next arrow...</p>
-						<p class="fragment">... to step through ...</p>
-						<p><span class="fragment">... a</span> <span class="fragment">fragmented</span> <span class="fragment">slide.</span></p>
-
-						<aside class="notes">
-							This slide has fragments which are also stepped through in the notes window.
-						</aside>
-					</section>
-					<section>
-						<h2>Fragment Styles</h2>
-						<p>There's different types of fragments, like:</p>
-						<p class="fragment grow">grow</p>
-						<p class="fragment shrink">shrink</p>
-						<p class="fragment fade-out">fade-out</p>
-						<p class="fragment current-visible">current-visible</p>
-						<p class="fragment highlight-red">highlight-red</p>
-						<p class="fragment highlight-blue">highlight-blue</p>
-					</section>
-				</section>
-
-				<section id="transitions">
-					<h2>Transition Styles</h2>
-					<p>
-						You can select from different transitions, like: <br>
-						<a href="?transition=none#/transitions">None</a> -
-						<a href="?transition=fade#/transitions">Fade</a> -
-						<a href="?transition=slide#/transitions">Slide</a> -
-						<a href="?transition=convex#/transitions">Convex</a> -
-						<a href="?transition=concave#/transitions">Concave</a> -
-						<a href="?transition=zoom#/transitions">Zoom</a>
-					</p>
-				</section>
-
-				<section id="themes">
-					<h2>Themes</h2>
-					<p>
-						reveal.js comes with a few themes built in: <br>
-						<!-- Hacks to swap themes after the page has loaded. Not flexible and only intended for the reveal.js demo deck. -->
-						<a href="#" onclick="document.getElementById('theme').setAttribute('href','css/theme/black.css'); return false;">Black (default)</a> -
-						<a href="#" onclick="document.getElementById('theme').setAttribute('href','css/theme/white.css'); return false;">White</a> -
-						<a href="#" onclick="document.getElementById('theme').setAttribute('href','css/theme/league.css'); return false;">League</a> -
-						<a href="#" onclick="document.getElementById('theme').setAttribute('href','css/theme/sky.css'); return false;">Sky</a> -
-						<a href="#" onclick="document.getElementById('theme').setAttribute('href','css/theme/beige.css'); return false;">Beige</a> -
-						<a href="#" onclick="document.getElementById('theme').setAttribute('href','css/theme/simple.css'); return false;">Simple</a> <br>
-						<a href="#" onclick="document.getElementById('theme').setAttribute('href','css/theme/serif.css'); return false;">Serif</a> -
-						<a href="#" onclick="document.getElementById('theme').setAttribute('href','css/theme/blood.css'); return false;">Blood</a> -
-						<a href="#" onclick="document.getElementById('theme').setAttribute('href','css/theme/night.css'); return false;">Night</a> -
-						<a href="#" onclick="document.getElementById('theme').setAttribute('href','css/theme/moon.css'); return false;">Moon</a> -
-						<a href="#" onclick="document.getElementById('theme').setAttribute('href','css/theme/solarized.css'); return false;">Solarized</a>
-					</p>
-				</section>
-
-				<section>
-					<section data-background="#dddddd">
-						<h2>Slide Backgrounds</h2>
-						<p>
-							Set <code>data-background="#dddddd"</code> on a slide to change the background color. All CSS color formats are supported.
-						</p>
-						<a href="#" class="navigate-down">
-							<img width="178" height="238" data-src="https://s3.amazonaws.com/hakim-static/reveal-js/arrow.png" alt="Down arrow">
-						</a>
-					</section>
-					<section data-background="https://s3.amazonaws.com/hakim-static/reveal-js/image-placeholder.png">
-						<h2>Image Backgrounds</h2>
-						<pre><code class="hljs">&lt;section data-background="image.png"&gt;</code></pre>
-					</section>
-					<section data-background="https://s3.amazonaws.com/hakim-static/reveal-js/image-placeholder.png" data-background-repeat="repeat" data-background-size="100px">
-						<h2>Tiled Backgrounds</h2>
-						<pre><code class="hljs" style="word-wrap: break-word;">&lt;section data-background="image.png" data-background-repeat="repeat" data-background-size="100px"&gt;</code></pre>
-					</section>
-					<section data-background-video="https://s3.amazonaws.com/static.slid.es/site/homepage/v1/homepage-video-editor.mp4,https://s3.amazonaws.com/static.slid.es/site/homepage/v1/homepage-video-editor.webm" data-background-color="#000000">
-						<div style="background-color: rgba(0, 0, 0, 0.9); color: #fff; padding: 20px;">
-							<h2>Video Backgrounds</h2>
-							<pre><code class="hljs" style="word-wrap: break-word;">&lt;section data-background-video="video.mp4,video.webm"&gt;</code></pre>
-						</div>
-					</section>
-					<section data-background="http://i.giphy.com/90F8aUepslB84.gif">
-						<h2>... and GIFs!</h2>
-					</section>
-				</section>
-
-				<section data-transition="slide" data-background="#4d7e65" data-background-transition="zoom">
-					<h2>Background Transitions</h2>
-					<p>
-						Different background transitions are available via the backgroundTransition option. This one's called "zoom".
-					</p>
-					<pre><code class="hljs">Reveal.configure({ backgroundTransition: 'zoom' })</code></pre>
-				</section>
-
-				<section data-transition="slide" data-background="#b5533c" data-background-transition="zoom">
-					<h2>Background Transitions</h2>
-					<p>
-						You can override background transitions per-slide.
-					</p>
-					<pre><code class="hljs" style="word-wrap: break-word;">&lt;section data-background-transition="zoom"&gt;</code></pre>
-				</section>
-
-				<section>
-					<h2>Pretty Code</h2>
-					<pre><code class="hljs" data-trim contenteditable>
-function linkify( selector ) {
-  if( supports3DTransforms ) {
-
-    var nodes = document.querySelectorAll( selector );
-
-    for( var i = 0, len = nodes.length; i &lt; len; i++ ) {
-      var node = nodes[i];
-
-      if( !node.className ) {
-        node.className += ' roll';
-      }
+          <section>
+            <h2>How to do so?</h2>
+					  <pre><code class="cpp" data-trim contenteditable>
+#include &lt;queue&gt;
+#include &lt;stdio.h&gt;
+using namespace std;
+int main(){
+  queue&lt;int&gt; q;
+  q.push( 514 ); q.push( 514514 );
+  printf( "%d\n" , (int)q.size() ); // 2
+  printf( "%d\n" , q.front() ); // 514
+  q.pop();
+  printf( "%d\n" , q.front() ); // 514514
+  q.pop();
+  printf( "%s\n" , q.empty() ? "empty" : "not empty" );
+  // empty
+}
+					  </code></pre>
+          </section>
+          <section>
+            <h1>常見題型</h1>
+            <ul>
+              <li>一臉佇列樣</li>
+              <li>Breadth First Search(BFS)!</li>
+              <li> <strike>中國人排隊問題</strike> </li>
+            </ul>
+          </section>
+          <section>
+            <p>$R \times C$的地圖上，有障礙物、人(恰一個)、起火點(若干個)，問人是否能在不受火災侵襲而逃出迷宮？</p>
+            <img src="images/uva11624.png">
+          </section>
+          <section>
+            <img src="images/uva11624-1.png">
+          </section>
+          <section>
+            <h2>火很多QQ</h2>
+            <p>要 BFS 很多次，複雜度 $O(R\times C \times R \times C)$</p>
+          </section>
+          <section>
+            <h1>全部火一起BFS!</h1>
+            <p>複雜度 $O(R\times C )$</p>
+          </section>
+          <section>
+            <pre><code class="cpp" data-trim contenteditable>
+while( q.size() ){
+  PII tp = q.front(); q.pop();
+  int nr = tp.first;
+  int nc = tp.second;
+  for( int i = 0 ; i &lt; 4 ; i ++ ){
+    int nxtr = nr + dr[ i ];
+    int nxtc = nc + dc[ i ];
+    if( !in( nxtr , nxtc ) )
+      ans = min( ans , dst[ nr ][ nc ] + 1 );
+    else if( m[ nxtr ][ nxtc ] != '#' &&
+             dst[ nr ][ nc ] + 1 &lt; dst[ nxtr ][ nxtc ] ){
+      dst[ nxtr ][ nxtc ] = dst[ nr ][ nc ] + 1;
+      q.push( { nxtr , nxtc } );
     }
   }
 }
-					</code></pre>
-					<p>Code syntax highlighting courtesy of <a href="http://softwaremaniacs.org/soft/highlight/en/description/">highlight.js</a>.</p>
-				</section>
-
-				<section>
-					<h2>Marvelous List</h2>
-					<ul>
-						<li>No order here</li>
-						<li>Or here</li>
-						<li>Or here</li>
-						<li>Or here</li>
-					</ul>
-				</section>
-
-				<section>
-					<h2>Fantastic Ordered List</h2>
-					<ol>
-						<li>One is smaller than...</li>
-						<li>Two is smaller than...</li>
-						<li>Three!</li>
-					</ol>
-				</section>
-
-				<section>
-					<h2>Tabular Tables</h2>
-					<table>
-						<thead>
-							<tr>
-								<th>Item</th>
-								<th>Value</th>
-								<th>Quantity</th>
-							</tr>
-						</thead>
-						<tbody>
-							<tr>
-								<td>Apples</td>
-								<td>$1</td>
-								<td>7</td>
-							</tr>
-							<tr>
-								<td>Lemonade</td>
-								<td>$2</td>
-								<td>18</td>
-							</tr>
-							<tr>
-								<td>Bread</td>
-								<td>$3</td>
-								<td>2</td>
-							</tr>
-						</tbody>
-					</table>
-				</section>
-
-				<section>
-					<h2>Clever Quotes</h2>
-					<p>
-						These guys come in two forms, inline: <q cite="http://searchservervirtualization.techtarget.com/definition/Our-Favorite-Technology-Quotations">
-						&ldquo;The nice thing about standards is that there are so many to choose from&rdquo;</q> and block:
-					</p>
-					<blockquote cite="http://searchservervirtualization.techtarget.com/definition/Our-Favorite-Technology-Quotations">
-						&ldquo;For years there has been a theory that millions of monkeys typing at random on millions of typewriters would
-						reproduce the entire works of Shakespeare. The Internet has proven this theory to be untrue.&rdquo;
-					</blockquote>
-				</section>
-
-				<section>
-					<h2>Intergalactic Interconnections</h2>
-					<p>
-						You can link between slides internally,
-						<a href="#/2/3">like this</a>.
-					</p>
-				</section>
-
-				<section>
-					<h2>Speaker View</h2>
-					<p>There's a <a href="https://github.com/hakimel/reveal.js#speaker-notes">speaker view</a>. It includes a timer, preview of the upcoming slide as well as your speaker notes.</p>
-					<p>Press the <em>S</em> key to try it out.</p>
-
-					<aside class="notes">
-						Oh hey, these are some notes. They'll be hidden in your presentation, but you can see them if you open the speaker notes window (hit 's' on your keyboard).
-					</aside>
-				</section>
-
-				<section>
-					<h2>Export to PDF</h2>
-					<p>Presentations can be <a href="https://github.com/hakimel/reveal.js#pdf-export">exported to PDF</a>, here's an example:</p>
-					<iframe src="https://www.slideshare.net/slideshow/embed_code/42840540" width="445" height="355" frameborder="0" marginwidth="0" marginheight="0" scrolling="no" style="border:3px solid #666; margin-bottom:5px; max-width: 100%;" allowfullscreen> </iframe>
-				</section>
-
-				<section>
-					<h2>Global State</h2>
-					<p>
-						Set <code>data-state="something"</code> on a slide and <code>"something"</code>
-						will be added as a class to the document element when the slide is open. This lets you
-						apply broader style changes, like switching the page background.
-					</p>
-				</section>
-
-				<section data-state="customevent">
-					<h2>State Events</h2>
-					<p>
-						Additionally custom events can be triggered on a per slide basis by binding to the <code>data-state</code> name.
-					</p>
-					<pre><code class="javascript" data-trim contenteditable style="font-size: 18px;">
-Reveal.addEventListener( 'customevent', function() {
-	console.log( '"customevent" has fired' );
-} );
-					</code></pre>
-				</section>
-
-				<section>
-					<h2>Take a Moment</h2>
-					<p>
-						Press B or . on your keyboard to pause the presentation. This is helpful when you're on stage and want to take distracting slides off the screen.
-					</p>
-				</section>
-
-				<section>
-					<h2>Much more</h2>
-					<ul>
-						<li>Right-to-left support</li>
-						<li><a href="https://github.com/hakimel/reveal.js#api">Extensive JavaScript API</a></li>
-						<li><a href="https://github.com/hakimel/reveal.js#auto-sliding">Auto-progression</a></li>
-						<li><a href="https://github.com/hakimel/reveal.js#parallax-background">Parallax backgrounds</a></li>
-						<li><a href="https://github.com/hakimel/reveal.js#keyboard-bindings">Custom keyboard bindings</a></li>
-					</ul>
-				</section>
-
-				<section style="text-align: left;">
-					<h1>THE END</h1>
-					<p>
-						- <a href="http://slides.com">Try the online editor</a> <br>
-						- <a href="https://github.com/hakimel/reveal.js">Source code &amp; documentation</a>
-					</p>
-				</section>
-
+            </code></pre>
+          </section>
+        </section>
+        <!-- deque -->
+        <section>
+          <section>
+            <h1>雙端佇列 Deque</h1>
+          </section>
+          <section>
+            <h2>What is deque?</h2>
+            <ul>
+              <li>都進都出, Both In Both Out</li>
+              <li>支援兩端push, pop</li>
+            </ul>
+          </section>
+					<section>
+            <img src="images/deque.png">
+					</section>
+          <section>
+            <h2>How to do so?</h2>
+					  <pre><code class="cpp" data-trim contenteditable>
+#include &lt;deque&gt;
+#include &lt;stdio.h&gt;
+using namespace std;
+int main(){
+  deque&lt;int&gt; dq;
+  dq.push_back( 514 ); // 514
+  dq.push_back( 514514 ); // 514 514514
+  dq.push_front( 514514514 ); // 514514514 514 514514
+  printf( "%d\n" , (int)dq.size() ); // 3
+  printf( "%d\n" , dq.front() ); // 514514514
+  printf( "%d\n" , dq.back() ); // 514514
+  dq.pop_front();
+  printf( "%d\n" , dq[ 1 ] ); // 514514
+}
+					  </code></pre>
+            <h3>STL 中 deque 支援random access!</h3>
+          </section>
+          <section>
+            <h1>常見題型</h1>
+            <ul>
+              <li>一臉得可樣</li>
+              <li>維護單調性與區間長度</li>
+              <li>DP斜率優化</li>
+            </ul>
+          </section>
+          <section>
+            <p>給長度 $N$ 的序列 $a$ 及正整數 $K$。求出所有 $b_i = max\{ a_{i-K+1}, a_{i-K+2}, \cdots, a_i \}$</p>
+          </section>
+          <section>
+            <p>當 i &lt; j 且 $a_i$ &lt; $a_j$，則 $a_i$ 就再也不可能是答案</p>
+            <p>同時維護長度！</p>
+          </section>
+          <section>
+            <pre><code class="cpp" data-trim contenteditable>
+deque&lt;int&gt; dq;
+for( int i = 1 ; i &lt;= n ; i ++ ){
+  while( dq.size() && dq.front()&lt;=i-k ) dq.pop_front();
+  while( dq.size() && a[dq.back()]&lt;=a[i] ) dq.pop_back();
+  dq.push_back( i );
+  b[ i ] = a[ dq.front() ];
+}
+            </code></pre>
+          </section>
+        </section>
+        <!-- priority queue -->
+        <section>
+          <section>
+            <h1>優先佇列</h1>
+            <h1>Priority Queue</h1>
+          </section>
+          <section>
+            <h2>What is priority queue?</h2>
+            <ul>
+              <li>VIP制</li>
+              <li>優先權越高，越早出來</li>
+              <li>支援push, pop</li>
+            </ul>
+          </section>
+					<section>
+            <img src="images/heap.png">
+					</section>
+          <section>
+            <h2>How to do so?</h2>
+					  <pre><code class="cpp" data-trim contenteditable>
+#include &lt;queue&gt;
+#include &lt;stdio.h&gt;
+using namespace std;
+typedef priority_queue&lt;int&gt; Heap;
+int main(){
+  Heap h;
+  h.push( 5 ); h.push( 1 ); h.push( 4 );
+  printf( "%d\n" , (int)h.size() ); // 3
+  printf( "%d\n" , h.top() ); // 5
+  h.pop();
+  printf( "%d\n" , h.top() ); // 4
+  h.push( 2 );
+  printf( "%d\n" , h.top() ); // 4
+  h.pop();
+  printf( "%d\n" , h.top() ); // 2
+}
+					  </code></pre>
+            <h3>STL 中優先權大者爲值較大者</h3>
+          </section>
+          <section>
+            <h2>自定義比較函式</h2>
+            <pre><code class="cpp" data-trim contenteditable>
+struct cmp{
+  bool operator()( int a , int b ){
+    return a % 3 &lt; b % 3;
+  }
+};
+int main(){
+  priority_queue&lt;int, vector&lt;int&gt;, cmp&gt; h;
+  h.push( 4 );
+  printf( "%d\n" , h.top() ); // 4, 4 % 3 == 1
+  h.push( 51 );
+  printf( "%d\n" , h.top() ); // 4, 51 % 3 == 0
+  h.push( 104 );
+  printf( "%d\n" , h.top() ); // 104, 104 % 3 == 2
+}
+            </code></pre>
+          </section>
+          <section>
+            <h1>常見問題</h1>
+            <ul>
+              <li>Greedy的輔助工具</li>
+              <li>動態維護極值</li>
+            </ul>
+          </section>
+          <section>
+            <h2>非負權圖上單源最短路</h2>
+            <h3>Dijkstra 算法</h3>
+          </section>
+          <section>
+            <pre><code class="cpp" data-trim contenteditable>
+vector&lt;PII&gt; e[ N ];
+priority_queue&lt;PII,vector&lt;PII&gt;,greater&lt;PII&gt; &gt; heap;
+void Dijkstra( int source ){
+  heap.push( { 0 , source } );
+  while( heap.size() ){
+    PII tp = heap.top(); heap.pop();
+    int tdst = tp.first , tnode = tp.second;
+    if( vst[ tnode ] ) continue;
+    dst[ tnode ] = tdst;
+    vst[ tnode ] = true;
+    for( size_t i = 0 ; i &lt; e[ tnode ].size() ; i ++ ){
+      int nxt = e[ tnode ][ i ].first;
+      int nxtdst = e[ tnode ][ i ].second + dst[ tnode ];
+      if( vst[ nxt ] ) continue;
+      heap.push( { nxtdst , nxt } );
+    }
+  }
+}
+            </code></pre>
+          </section>
+          <section>
+            <h1>這樣就滿足了嗎？</h1>
+          </section>
+          <section>
+            <h2>Black Magic</h2>
+            <pre><code class="cpp" data-trim contenteditable>
+#include &lt;bits/extc++.h&gt;
+#include &lt;stdio.h&gt;
+using namespace __gnu_pbds;
+typedef priority_queue&lt;int&gt; heap;
+int main(){
+  heap h1 , h2;
+  h1.push( 1 ); h1.push( 3 );
+  h2.push( 2 ); h2.push( 4 );
+  h1.join( h2 );
+  printf( "%d\n" , (int)h1.size() ); // 4
+  printf( "%d\n" , (int)h2.size() ); // 0
+  printf( "%d\n" , h1.top() ); // 4
+  h1.pop();
+}
+            </code></pre>
+            <h2>插入及合併$\Theta(1)$!</h2>
+          </section>
+        </section>
+        <!-- disjoint set -->
+        <section>
+          <section>
+            <h1>並查集</h1>
+            <h1>Disjoint Set</h1>
+          </section>
+          <section>
+            <h2>What is disjoint set?</h2>
+            <ul>
+              <li>維護兩兩互斥的集合</li>
+              <li>支援合併及查詢</li>
+            </ul>
+          </section>
+					<section>
+            <img src="images/djs.png">
+					</section>
+          <section>
+            <h2>How to do so?</h2>
+            <h3>沒有現成的可以用QQ</h3>
+          </section>
+          <section>
+            <h2>How to do so?</h2>
+            <h3>超好寫！</h3>
+					  <pre><code class="cpp" data-trim contenteditable>
+struct DisjointSet{
+  int p[ N ];
+  void Init( int n ){
+    for( int i = 1 ; i &lt;= n ; i ++ ) p[ i ] = i;
+  }
+  int Find( int x ){
+    return x == p[ x ] ? x : Find( p[ x ] );
+  }
+  void Union( int x , int y ){
+    p[ Find( x ) ] = Find( y );
+  }
+};
+					  </code></pre>
+          </section>
+          <section>
+            <h1>Upgrade!! 路徑壓縮</h1>
+					  <pre><code class="cpp" data-trim contenteditable>
+int Find( int x ){
+  return x == p[ x ] ? x : p[ x ] = Find( p[ x ] );
+}
+					  </code></pre>
+            <h2>查詢複雜度$O(\lg N)$</h2>
+          </section>
+					<section>
+            <img src="images/djs-1.png">
+					</section>
+          <section>
+            <h1>Upgrade again!! Union by rank</h1>
+            <h2>啓發式合併的思想</h2>
+            <h2>查詢複雜度$O(\lg N)$</h2>
+          </section>
+          <section>
+					  <pre><code class="cpp" data-trim contenteditable>
+int p[ N ] , sz[ N ];
+void Init( int n ){
+  for( int i = 1 ; i &lt;= n ; i ++ )
+    p[ i ] = i, sz[ i ] = 1;
+}
+void Union( int x , int y ){
+  x = Find( x ); y = Find( y );
+  if( x == y ) return;
+  p[ x ] = y;
+  sz[ y ] += sz[ x ];
+}
+					  </code></pre>
+          </section>
+          <section>
+            <h1>雙管齊下！</h1>
+            <h2>操作均攤複雜度$O(\alpha(n))$</h2>
+          </section>
+          <section>
+            <h1>常見問題</h1>
+            <ul>
+              <li>連通塊</li>
+              <li>等價性質</li>
+            </ul>
+          </section>
+          <section>
+            <p>無向圖 $G$，$N$ 個點、$M$ 條邊，破壞 $Q$ 條邊，問每破壞一條邊後連通塊數？</p>
+            <img src="images/ural1671.png">
+          </section>
+          <section>
+            <h2>剛剛好像沒有教過將並查集分裂...</h2>
+          </section>
+          <section>
+            <h1>時光倒流！</h1>
+            <p>破壞 $\rightarrow$ 建造</p>
+          </section>
+          <section>
+            <p>三類動物，$A$ 吃 $B$、$B$ 吃 $C$、$C$ 吃 $A$。給 $N$ 個動物，$K$ 筆資訊包含：</p>
+            <ul>
+              <li>$X$ 和 $Y$ 是同類</li>
+              <li>$X$ 吃 $Y$</li>
+            </ul>
+            <p>問有多少條資訊錯誤？</p>
+          </section>
+          <section>
+            <h2>連通塊?</h2>
+            <h3>$X$ 吃 $Y$ 是同一個集合？</h3>
+          </section>
+          <section>
+            <h2>維護不互斥的資訊！</h2>
+            <h3>資訊：$X_i$，$X$ 屬於第 $i$ 類</h3>
+          </section>
+          <section>
+            <h2> $X$ 和 $Y$ 同類</h2>
+            <ol>
+              <li>檢查是否有 $X_A$ 和 $Y_B,Y_C$ 同類，...</li>
+              <li>將 $X_A,Y_A$、$X_B,Y_B$、$X_C,Y_C$ 合併爲一個並查集</li>
+            </ol>
+          </section>
+          <section>
+            <h2> $X$ 吃 $Y$</h2>
+            <ol>
+              <li>檢查是否有 $X_A$ 和 $Y_A,Y_C$ 同類，...</li>
+              <li>將 $X_A,Y_B$、$X_B,Y_C$、$X_C,Y_A$ 合併爲一個並查集</li>
+            </ol>
+          </section>
+          <section>
+            <pre><code class="cpp" data-trim contenteditable>
+if( type == 1 ){
+  if( djs.Find( trans( x , 0 ) ) == djs.Find( trans( y , 1 ) ) ||
+      djs.Find( trans( x , 0 ) ) == djs.Find( trans( y , 2 ) ) ){
+    fake ++; continue;
+  }
+  for( int i = 0 ; i &lt; 3 ; i ++ )
+    djs.Union( trans( x , i ) , trans( y , i ) );
+}else{
+  if( djs.Find( trans( x , 0 ) ) == djs.Find( trans( y , 0 ) ) ||
+      djs.Find( trans( x , 0 ) ) == djs.Find( trans( y , 2 ) ) ){
+    fake ++; continue;
+  }
+  for( int i = 0 ; i &lt; 3 ; i ++ )
+    djs.Union( trans( x , i ) , trans( y , ( i + 1 ) % 3 ) );
+}
+            </code></pre>
+          </section>
+          <section>
+            <h1>這樣就滿足了嗎？</h1>
+            <h3>(again)</h3>
+          </section>
+          <section>
+            <h1>Connected?</h1>
+            <p>給你 $N$ 個點，$Q$ 筆操作：加邊或將最近 $k$ 條邊拔除，每筆操作完輸出連通塊個數</p>
+          </section>
+          <section>
+            <h1>Connected?</h1>
+            <ul>
+              <li>可持久化 Disjoint Set?</li>
+              <li>倒著做?</li>
+            </ul>
+          </section>
+          <section>
+            <h1>Undo disjoint set!</h1>
+          </section>
+          <section>
+            <h2>Undo disjoint set!</h2>
+            <p>Find, Union都是一些assign操作!</p>
+          </section>
+          <section>
+            <h2>Undo disjoint set!</h2>
+					  <pre><code class="cpp" data-trim contenteditable>
+vector&lt; pair&lt;int*,int&gt; &gt; h; vector&lt;int&gt; sp;
+void assign( int *k, int v ){ h.push_back( {k, *k} ); *k = v; }
+void save(){ sp.push_back(h.size()); }
+void undo(){
+  int last=sp.back(); sp.pop_back();
+  while( h.size()!=last ){
+    auto x=h.back(); h.pop_back();
+    *x.first = x.second;
+  }
+}
+void Union( int x , int y ){
+  x = Find( x ); y = Find( y );
+  if( x == y ) return;
+  assign( &sz[ x ] , sz[ x ] + sz[ y ] );
+  assign( &p[ y ] , x );
+}
+					  </code></pre>
+          </section>
+        </section>
+        <!-- segment tree -->
+        <section>
+          <section>
+            <h1>線段樹</h1>
+            <h1>Segment Treee</h1>
+          </section>
+          <section>
+            <p>給你長度 $N$ 的序列 $v$，$Q$ 筆操作：</p>
+            <ul>
+              <li>將 $v_i$ 加上 $d$</li>
+              <li>詢問區間 $[l,r]$ 的總和</li>
+            </ul>
+          </section>
+          <section>
+            <h2>What is segment tree?</h2>
+            <ul>
+              <li>二元樹狀結構</li>
+              <li>處理區間問題</li>
+            </ul>
+          </section>
+					<section>
+            <img src="images/st.png">
+					</section>
+          <section>
+            <h2>實作方式-node</h2>
+					  <pre><code class="cpp" data-trim contenteditable>
+struct Node{
+  int val;
+  Node *lc , *rc;
+  Node(){ val = 0; lc = rc = NULL; }
+  void pull(){
+    val = lc-&gt;val + rc-&gt;val;
+  }
+};
+            </code></pre>
+          </section>
+          <section>
+            <h2>初始化線段樹 四部曲</h2>
+            <ol>
+              <li>葉節點直接得到資訊</li>
+              <li>建立左子樹</li>
+              <li>建立右子樹</li>
+              <li>pull</li>
+            </ol>
+          </section>
+          <section>
+            <h2>實作方式-build</h2>
+					  <pre><code class="cpp" data-trim contenteditable>
+Node* build( int L , int R ){
+  Node *node = new Node();
+  if( L == R ){
+    node-&gt;val = v[ L ];
+    return node;
+  }
+  int mid = ( L + R ) &gt;&gt; 1;
+  node-&gt;lc = build( L , mid );
+  node-&gt;rc = build( mid + 1 , R );
+  node-&gt;pull();
+  return node;
+}
+            </code></pre>
+          </section>
+          <section>
+            <h2>修改線段樹 三部曲</h2>
+            <ol>
+              <li>葉節點直接修改資訊</li>
+              <li>修改包含 $i$ 的子樹</li>
+              <li>pull</li>
+            </ol>
+          </section>
+          <section>
+            <h2>實作方式-modify</h2>
+					  <pre><code class="cpp" data-trim contenteditable>
+void modify( Node* node , int L , int R , int i , int d ){
+  if( L == R ){
+    assert( L == i );
+    node-&gt;val += d;
+    return;
+  }
+  int mid = ( L + R ) &gt;&gt; 1;
+  if( i &lt;= mid ) modify( node-&gt;lc , L , mid , i , d );
+  else modify( node-&gt;rc , mid + 1 , R , i , d );
+  node-&gt;pull();
+}
+            </code></pre>
+          </section>
+					<section>
+            <img src="images/st-1.png">
+					</section>
+          <section>
+            <h2>詢問線段樹 五步驟</h2>
+            <ol>
+              <li>區間不相交，直接回傳</li>
+              <li>區間包含，回傳節點上資訊</li>
+              <li>收集左子樹資訊</li>
+              <li>收集右子樹資訊</li>
+              <li>結合兩子樹資訊</li>
+            </ol>
+          </section>
+          <section>
+            <h2>實作方式-query</h2>
+					  <pre><code class="cpp" data-trim contenteditable>
+int query( Node* node , int L , int R , int ql , int qr ){
+  if( ql &gt; R || qr &lt; L ) return 0;
+  if( ql &lt;= L && R &lt;= qr ) return node-&gt;val;
+  int mid = ( L + R ) &gt;&gt; 1;
+  return query( node-&gt;lc , L , mid , ql , qr ) +
+         query( node-&gt;rc , mid + 1 , R , ql , qr );
+}
+            </code></pre>
+          </section>
+					<section>
+            <img src="images/st-2.png">
+					</section>
+          <section>
+            <p>給你長度 $N$ 的序列 $v$，$Q$ 筆操作：</p>
+            <ul>
+              <li>將區間 $[l,r]$ 都加上 $d$</li>
+              <li>詢問區間 $[l,r]$ 的總和</li>
+            </ul>
+          </section>
+          <section>
+            <h2>擴充包-線段樹懶標記(Lazy tag)</h2>
+            <img src="images/fun.jpe">
+          </section>
+					<section>
+            <img src="images/st-3.png">
+					</section>
+					<section>
+            <img src="images/st-4.png">
+					</section>
+					<section>
+            <img src="images/st-5.png">
+					</section>
+					<section>
+            <img src="images/st-6.png">
+					</section>
+          <section>
+            <h2>Push!</h2>
+					  <pre><code class="cpp" data-trim contenteditable>
+void push( Node* node , int L , int R ){
+  if( !node-&gt;tag ) return;
+  if( L != R ){ // check leaf
+    int mid = ( L + R ) &gt;&gt; 1;
+    node-&gt;lc-&gt;tag += node-&gt;tag;
+    node-&gt;rc-&gt;tag += node-&gt;tag;
+    node-&gt;lc-&gt;val += node-&gt;tag * ( mid - L + 1 );
+    node-&gt;rc-&gt;val += node-&gt;tag * ( R - mid );
+  }
+  node-&gt;tag = 0;
+}
+            </code></pre>
+          </section>
+          <section>
+            <h2>線段樹懶標記</h2>
+            <ul>
+              <li>修改、詢問時，遇到標記即push!</li>
+            </ul>
+          </section>
+          <section>
+            <h2>牛刀小試</h2>
+            <p>$N \times N$($N \le 10^9$) 矩陣初始值爲零，$Q$ 筆操作:</p>
+            <ul>
+              <li> 將 $(x,y)$ 座標加上 d </li>
+              <li> 詢問 $(x_1,y_1)$ 到 $(x_2,y_2) 子矩陣的和。$ </li>
+            </ul>
+          </section>
+          <section>
+            <h2>離散化？</h2>
+            <h2>空間爆炸</h2>
+          </section>
+          <section>
+            <h2>擴充包2-copy on write</h2>
+          </section>
+          <section>
+            <h2>用到的點很少，那要用再開！</h2>
+            <img src="images/stcow.png">
+          </section>
+          <section>
+            <h2>實作方式</h2>
+            <p>要往下走時先確認有沒有該節點(想想 Trie!)</p>
+            <p>pull 時確認是否有該節點</p>
+            <pre><code class="cpp" data-trim contenteditable>
+int Val2( Node2* node ){ return node ? node-&gt;val : 0; }
+void pull2( Node2* node ){
+  node-&gt;val = Val2( node-&gt;lc ) + Val2( node-&gt;rc );
+}
+            </code></pre>
+          </section>
+          <section>
+            <h2>牛刀小試2</h2>
+            <p>給長度 $N 的序列 $v$，$Q$ 筆操作:</p>
+            <ul>
+              <li> 將 $v_i$ 加上 d </li>
+              <li> 詢問第 $k$ 筆操作後，區間 $[l,r]$ 的總和 </li>
+            </ul>
+            <h3>強迫在線</h3>
+          </section>
+          <section>
+            <h2>擴充包3-可持久化</h2>
+          </section>
+          <section>
+            <h2>一個版本長一棵！</h2>
+            <img src="images/stper.png">
+          </section>
+          <section>
+            <h2>實作方式</h2>
+            <p>共同指向共用的節點</p>
+            <p>修改時新增自己用到的節點</p>
+            <p>詢問完全一樣！</p>
+          </section>
+          <section>
+            <h2>三刀並用</h2>
+            <ul>
+              <li>區間修改 $\rightarrow$ 懶標記</li>
+              <li>大範圍區間 $\rightarrow$ Copy on write</li>
+              <li>版本控制 $\rightarrow$ 可持久化</li>
+            </ul>
+          </section>
+          <section>
+            <h3>區間反轉、區間搬移、區間複製、$\cdots$</h3>
+          </section>
+        </section>
+        <!-- treap -->
+        <section>
+          <section>
+            <h1>樹堆 Treap</h1>
+            <h3>邁向序列操作大師之路！</h3>
+          </section>
+          <section>
+            <h2>What is Treap?</h2>
+            <ul>
+              <li>Tree+Heap</li>
+              <li>滿足樹性質</li>
+              <li>滿足堆性質</li>
+            </ul>
+          </section>
+          <section>
+            <h2>樹性質？</h2>
+            <ul>
+              <li>Key $\ge$ 左子節點的 Key</li>
+              <li>Key $\le$ 右子節點的 Key</li>
+            </ul>
+            <img src="images/treap.png"> 
+          </section>
+          <section>
+            <h2>堆性質？</h2>
+            <ul>
+              <li>Pri $\ge$ 左子節點的 Pri</li>
+              <li>Pri $\ge$ 右子節點的 Pri</li>
+            </ul>
+            <img src="images/treap-1.png"> 
+          </section>
+          <section>
+            <h2>實作方式-Node</h2>
+            <pre><code class="cpp" data-trim contenteditable>
+struct Treap{
+  Treap *l , *r;
+  int pri , key , val;
+  Treap( int _val , int _key ) :
+    val( _val ) , key( _key ), l( 0 ), r( 0 ), pri( rand() ) {}
+};
+            </code></pre>
+          </section>
+          <section>
+            <h2>實作方式-merge</h2>
+            <h3>合併三部曲</h3>
+            <ul>
+              <li>樹爲空？</li>
+              <li>誰當根？</li>
+              <li>要做誰？</li>
+            </ul>
+          </section>
+          <section>
+            <h2>實作方式-merge</h2>
+            <pre><code class="cpp" data-trim contenteditable>
+Treap* merge( Treap* a , Treap* b ){
+  if( !a || !b ) return a ? a : b;
+  if( a-&gt;pri &gt; b-&gt;pri ){
+    a-&gt;r = merge( a-&gt;r , b );
+    return a;
+  }else{
+    b-&gt;l = merge( a , b-&gt;l );
+    return b;
+  }
+}
+            </code></pre>
+          </section>
+          <section>
+            <h2>實作方式-split</h2>
+            <h3>分裂三部曲</h3>
+            <ul>
+              <li>樹爲空？</li>
+              <li>根送誰？</li>
+              <li>要做誰？</li>
+            </ul>
+          </section>
+          <section>
+            <h2>實作方式-split</h2>
+            <pre><code class="cpp" data-trim contenteditable>
+void split( Treap* t , int k , Treap *&a , Treap *&b ){
+  if( !t ) a = b = NULL;
+  else if( t-&gt;key &lt;= k ){
+    a = t;
+    split( t-&gt;r , k , a-&gt;r , b );
+  }else{
+    b = t;
+    split( t-&gt;l , k , a , b-&gt;l );
+  }
+}
+            </code></pre>
+          </section>
+          <section>
+            <h2>沒有其他操作？</h2>
+          </section>
+          <section>
+            <h2>插入操作-Insert</h2>
+            <pre><code class="cpp" data-trim contenteditable>
+Treap* insert( Treap* t , int k ){
+  Treap *tl , *tr;
+  split( t , k , tl , tr );
+  return merge( tl , merge( new Treap( k ) , tr ) );
+}
+            </code></pre>
+          </section>
+          <section>
+            <h2>刪除操作-remove</h2>
+            <pre><code class="cpp" data-trim contenteditable>
+Treap* remove( Treap* t , int k ){
+  Treap *tl , *tr;
+  split( t , k - 1 , tl , t );
+  split( t , k , t , tr );
+  return merge( tl , tr );
+}
+            </code></pre>
+          </section>
+          <section>
+            <h1>去征服所有序列題吧！</h1>
+          </section>
+        </section>
+        <section>
+          <h2>Good Luck & Have Fun!</h2>
+        </section>
 			</div>
 
 		</div>
@@ -400,6 +970,7 @@ Reveal.addEventListener( 'customevent', function() {
 					{ src: 'plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
 					{ src: 'plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
 					{ src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+          { src: 'plugin/math/math.js', async: true },
 					{ src: 'plugin/zoom-js/zoom.js', async: true },
 					{ src: 'plugin/notes/notes.js', async: true }
 				]
