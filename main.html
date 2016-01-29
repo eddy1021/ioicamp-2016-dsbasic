@@ -145,6 +145,22 @@ int main(){
             <h2>計算最佳左右界</h2>
             <img src="images/poj2559-2.png">
           </section>
+          <section>
+            <pre><code class="cpp" data-trim contenteditable>
+stack&lt;int&gt; S;
+for( int i = 1 ; i &lt;= n ; i ++ ){
+  while( S.size() && h[ S.top() ] &gt;= h[ i ] ) S.pop();
+  L[ i ] = 1 + ( S.size() ? S.top() : 0 );
+  S.push( i );
+}
+while( S.size() ) S.pop();
+for( int i = n ; i &gt;= 1 ; i -- ){
+  while( S.size() && h[ S.top() ] &gt;= h[ i ] ) S.pop();
+  R[ i ] = ( S.size() ? S.top() : n + 1 ) - 1;
+  S.push( i );
+}
+            </code></pre>
+          </section>
         </section>
         <!-- queue -->
         <section>
@@ -203,6 +219,26 @@ int main(){
             <h1>全部火一起BFS!</h1>
             <p>複雜度 $O(R\times C )$</p>
           </section>
+          <section>
+            <pre><code class="cpp" data-trim contenteditable>
+while( q.size() ){
+  PII tp = q.front(); q.pop();
+  int nr = tp.first;
+  int nc = tp.second;
+  for( int i = 0 ; i &lt; 4 ; i ++ ){
+    int nxtr = nr + dr[ i ];
+    int nxtc = nc + dc[ i ];
+    if( !in( nxtr , nxtc ) )
+      ans = min( ans , dst[ nr ][ nc ] + 1 );
+    else if( m[ nxtr ][ nxtc ] != '#' &&
+             dst[ nr ][ nc ] + 1 &lt; dst[ nxtr ][ nxtc ] ){
+      dst[ nxtr ][ nxtc ] = dst[ nr ][ nc ] + 1;
+      q.push( { nxtr , nxtc } );
+    }
+  }
+}
+            </code></pre>
+          </section>
         </section>
         <!-- deque -->
         <section>
@@ -246,6 +282,24 @@ int main(){
               <li>維護單調性與區間長度</li>
               <li>DP斜率優化</li>
             </ul>
+          </section>
+          <section>
+            <p>給長度 $N$ 的序列 $a$ 及正整數 $K$。求出所有 $b_i = max\{ a_{i-K+1}, a_{i-K+2}, \cdots, a_i \}$</p>
+          </section>
+          <section>
+            <p>當 i &lt; j 且 $a_i$ &lt; $a_j$，則 $a_i$ 就再也不可能是答案</p>
+            <p>同時維護長度！</p>
+          </section>
+          <section>
+            <pre><code class="cpp" data-trim contenteditable>
+deque&lt;int&gt; dq;
+for( int i = 1 ; i &lt;= n ; i ++ ){
+  while( dq.size() && dq.front()&lt;=i-k ) dq.pop_front();
+  while( dq.size() && a[dq.back()]&lt;=a[i] ) dq.pop_back();
+  dq.push_back( i );
+  b[ i ] = a[ dq.front() ];
+}
+            </code></pre>
           </section>
         </section>
         <!-- priority queue -->
@@ -312,6 +366,32 @@ int main(){
               <li>Greedy的輔助工具</li>
               <li>動態維護極值</li>
             </ul>
+          </section>
+          <section>
+            <h2>非負權圖上單源最短路</h2>
+            <h3>Dijkstra 算法</h3>
+          </section>
+          <section>
+            <pre><code class="cpp" data-trim contenteditable>
+vector&lt;PII&gt; e[ N ];
+priority_queue&lt;PII,vector&lt;PII&gt;,greater&lt;PII&gt; &gt; heap;
+void Dijkstra( int source ){
+  heap.push( { 0 , source } );
+  while( heap.size() ){
+    PII tp = heap.top(); heap.pop();
+    int tdst = tp.first , tnode = tp.second;
+    if( vst[ tnode ] ) continue;
+    dst[ tnode ] = tdst;
+    vst[ tnode ] = true;
+    for( size_t i = 0 ; i &lt; e[ tnode ].size() ; i ++ ){
+      int nxt = e[ tnode ][ i ].first;
+      int nxtdst = e[ tnode ][ i ].second + dst[ tnode ];
+      if( vst[ nxt ] ) continue;
+      heap.push( { nxtdst , nxt } );
+    }
+  }
+}
+            </code></pre>
           </section>
           <section>
             <h1>這樣就滿足了嗎？</h1>
@@ -393,6 +473,21 @@ int Find( int x ){
             <h2>查詢複雜度$O(\lg N)$</h2>
           </section>
           <section>
+					  <pre><code class="cpp" data-trim contenteditable>
+int p[ N ] , sz[ N ];
+void Init( int n ){
+  for( int i = 1 ; i &lt;= n ; i ++ )
+    p[ i ] = i, sz[ i ] = 1;
+}
+void Union( int x , int y ){
+  x = Find( x ); y = Find( y );
+  if( x == y ) return;
+  p[ x ] = y;
+  sz[ y ] += sz[ x ];
+}
+					  </code></pre>
+          </section>
+          <section>
             <h1>雙管齊下！</h1>
             <h2>操作均攤複雜度$O(\alpha(n))$</h2>
           </section>
@@ -413,6 +508,55 @@ int Find( int x ){
           <section>
             <h1>時光倒流！</h1>
             <p>破壞 $\rightarrow$ 建造</p>
+          </section>
+          <section>
+            <p>三類動物，$A$ 吃 $B$、$B$ 吃 $C$、$C$ 吃 $A$。給 $N$ 個動物，$K$ 筆資訊包含：</p>
+            <ul>
+              <li>$X$ 和 $Y$ 是同類</li>
+              <li>$X$ 吃 $Y$</li>
+            </ul>
+            <p>問有多少條資訊錯誤？</p>
+          </section>
+          <section>
+            <h2>連通塊?</h2>
+            <h3>$X$ 吃 $Y$ 是同一個集合？</h3>
+          </section>
+          <section>
+            <h2>維護不互斥的資訊！</h2>
+            <h3>資訊：$X_i$，$X$ 屬於第 $i$ 類</h3>
+          </section>
+          <section>
+            <h2> $X$ 和 $Y$ 同類</h2>
+            <ol>
+              <li>檢查是否有 $X_A$ 和 $Y_B,Y_C$ 同類，...</li>
+              <li>將 $X_A,Y_A$、$X_B,Y_B$、$X_C,Y_C$ 合併爲一個並查集</li>
+            </ol>
+          </section>
+          <section>
+            <h2> $X$ 吃 $Y$</h2>
+            <ol>
+              <li>檢查是否有 $X_A$ 和 $Y_A,Y_C$ 同類，...</li>
+              <li>將 $X_A,Y_B$、$X_B,Y_C$、$X_C,Y_A$ 合併爲一個並查集</li>
+            </ol>
+          </section>
+          <section>
+            <pre><code class="cpp" data-trim contenteditable>
+if( type == 1 ){
+  if( djs.Find( trans( x , 0 ) ) == djs.Find( trans( y , 1 ) ) ||
+      djs.Find( trans( x , 0 ) ) == djs.Find( trans( y , 2 ) ) ){
+    fake ++; continue;
+  }
+  for( int i = 0 ; i &lt; 3 ; i ++ )
+    djs.Union( trans( x , i ) , trans( y , i ) );
+}else{
+  if( djs.Find( trans( x , 0 ) ) == djs.Find( trans( y , 0 ) ) ||
+      djs.Find( trans( x , 0 ) ) == djs.Find( trans( y , 2 ) ) ){
+    fake ++; continue;
+  }
+  for( int i = 0 ; i &lt; 3 ; i ++ )
+    djs.Union( trans( x , i ) , trans( y , ( i + 1 ) % 3 ) );
+}
+            </code></pre>
           </section>
           <section>
             <h1>這樣就滿足了嗎？</h1>
@@ -465,6 +609,13 @@ void Union( int x , int y ){
             <h1>Segment Treee</h1>
           </section>
           <section>
+            <p>給你長度 $N$ 的序列 $v$，$Q$ 筆操作：</p>
+            <ul>
+              <li>將 $v_i$ 加上 $d$</li>
+              <li>詢問區間 $[l,r]$ 的總和</li>
+            </ul>
+          </section>
+          <section>
             <h2>What is segment tree?</h2>
             <ul>
               <li>二元樹狀結構</li>
@@ -488,6 +639,15 @@ struct Node{
             </code></pre>
           </section>
           <section>
+            <h2>初始化線段樹 四部曲</h2>
+            <ol>
+              <li>葉節點直接得到資訊</li>
+              <li>建立左子樹</li>
+              <li>建立右子樹</li>
+              <li>pull</li>
+            </ol>
+          </section>
+          <section>
             <h2>實作方式-build</h2>
 					  <pre><code class="cpp" data-trim contenteditable>
 Node* build( int L , int R ){
@@ -503,6 +663,14 @@ Node* build( int L , int R ){
   return node;
 }
             </code></pre>
+          </section>
+          <section>
+            <h2>修改線段樹 三部曲</h2>
+            <ol>
+              <li>葉節點直接修改資訊</li>
+              <li>修改包含 $i$ 的子樹</li>
+              <li>pull</li>
+            </ol>
           </section>
           <section>
             <h2>實作方式-modify</h2>
@@ -524,6 +692,16 @@ void modify( Node* node , int L , int R , int i , int d ){
             <img src="images/st-1.png">
 					</section>
           <section>
+            <h2>詢問線段樹 五步驟</h2>
+            <ol>
+              <li>區間不相交，直接回傳</li>
+              <li>區間包含，回傳節點上資訊</li>
+              <li>收集左子樹資訊</li>
+              <li>收集右子樹資訊</li>
+              <li>結合兩子樹資訊</li>
+            </ol>
+          </section>
+          <section>
             <h2>實作方式-query</h2>
 					  <pre><code class="cpp" data-trim contenteditable>
 int query( Node* node , int L , int R , int ql , int qr ){
@@ -539,7 +717,15 @@ int query( Node* node , int L , int R , int ql , int qr ){
             <img src="images/st-2.png">
 					</section>
           <section>
-            <h2>擴充包-懶標記(Lazy tag)</h2>
+            <p>給你長度 $N$ 的序列 $v$，$Q$ 筆操作：</p>
+            <ul>
+              <li>將區間 $[l,r]$ 都加上 $d$</li>
+              <li>詢問區間 $[l,r]$ 的總和</li>
+            </ul>
+          </section>
+          <section>
+            <h2>擴充包-線段樹懶標記(Lazy tag)</h2>
+            <img src="images/fun.jpe">
           </section>
 					<section>
             <img src="images/st-3.png">
@@ -570,12 +756,22 @@ void push( Node* node , int L , int R ){
             </code></pre>
           </section>
           <section>
+            <h2>線段樹懶標記</h2>
+            <ul>
+              <li>修改、詢問時，遇到標記即push!</li>
+            </ul>
+          </section>
+          <section>
             <h2>牛刀小試</h2>
-            <p>$N \times N$ 矩陣初始值爲零，$Q$ 筆操作:</p>
+            <p>$N \times N$($N \le 10^9$) 矩陣初始值爲零，$Q$ 筆操作:</p>
             <ul>
               <li> 將 $(x,y)$ 座標加上 d </li>
               <li> 詢問 $(x_1,y_1)$ 到 $(x_2,y_2) 子矩陣的和。$ </li>
             </ul>
+          </section>
+          <section>
+            <h2>離散化？</h2>
+            <h2>空間爆炸</h2>
           </section>
           <section>
             <h2>擴充包2-copy on write</h2>
@@ -585,12 +781,24 @@ void push( Node* node , int L , int R ){
             <img src="images/stcow.png">
           </section>
           <section>
+            <h2>實作方式</h2>
+            <p>要往下走時先確認有沒有該節點(想想 Trie!)</p>
+            <p>pull 時確認是否有該節點</p>
+            <pre><code class="cpp" data-trim contenteditable>
+int Val2( Node2* node ){ return node ? node-&gt;val : 0; }
+void pull2( Node2* node ){
+  node-&gt;val = Val2( node-&gt;lc ) + Val2( node-&gt;rc );
+}
+            </code></pre>
+          </section>
+          <section>
             <h2>牛刀小試2</h2>
             <p>給長度 $N 的序列 $v$，$Q$ 筆操作:</p>
             <ul>
               <li> 將 $v_i$ 加上 d </li>
               <li> 詢問第 $k$ 筆操作後，區間 $[l,r]$ 的總和 </li>
             </ul>
+            <h3>強迫在線</h3>
           </section>
           <section>
             <h2>擴充包3-可持久化</h2>
@@ -600,12 +808,21 @@ void push( Node* node , int L , int R ){
             <img src="images/stper.png">
           </section>
           <section>
-            <h2>結論</h2>
+            <h2>實作方式</h2>
+            <p>共同指向共用的節點</p>
+            <p>修改時新增自己用到的節點</p>
+            <p>詢問完全一樣！</p>
+          </section>
+          <section>
+            <h2>三刀並用</h2>
             <ul>
               <li>區間修改 $\rightarrow$ 懶標記</li>
               <li>大範圍區間 $\rightarrow$ Copy on write</li>
               <li>版本控制 $\rightarrow$ 可持久化</li>
             </ul>
+          </section>
+          <section>
+            <h3>區間反轉、區間搬移、區間複製、$\cdots$</h3>
           </section>
         </section>
         <!-- treap -->
@@ -628,6 +845,7 @@ void push( Node* node , int L , int R ){
               <li>Key $\ge$ 左子節點的 Key</li>
               <li>Key $\le$ 右子節點的 Key</li>
             </ul>
+            <img src="images/treap.png"> 
           </section>
           <section>
             <h2>堆性質？</h2>
@@ -635,6 +853,7 @@ void push( Node* node , int L , int R ){
               <li>Pri $\ge$ 左子節點的 Pri</li>
               <li>Pri $\ge$ 右子節點的 Pri</li>
             </ul>
+            <img src="images/treap-1.png"> 
           </section>
           <section>
             <h2>實作方式-Node</h2>
